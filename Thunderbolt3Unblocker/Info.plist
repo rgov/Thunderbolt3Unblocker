@@ -21,6 +21,17 @@
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2018 Ryan Govostes. All rights reserved.</string>
 	<key>OSBundleLibraries</key>
-	<dict/>
+	<dict>
+		<key>com.apple.iokit.IOThunderboltFamily</key>
+		<string>1.0.0</string>
+		<key>com.apple.kpi.bsd</key>
+		<string>9.0</string>
+		<key>com.apple.kpi.libkern</key>
+		<string>9.0</string>
+		<key>com.apple.kpi.mach</key>
+		<string>9.0</string>
+		<key>com.apple.kpi.unsupported</key>
+		<string>9.0</string>
+	</dict>
 </dict>
 </plist>

@@ -8,12 +8,34 @@
 
 /* Begin PBXBuildFile section */
 		2A346BF3202320F2002530AD /* Thunderbolt3Unblocker.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A346BF2202320F2002530AD /* Thunderbolt3Unblocker.c */; };
+		2A67AC3C2024857000B0241C /* LICENSE.md in Resources */ = {isa = PBXBuildFile; fileRef = 2A67AC3B2024857000B0241C /* LICENSE.md */; };
+		2AFD4C582024648300FD58E4 /* libudis86.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AFD4C572024648300FD58E4 /* libudis86.a */; };
+		2AFD4C5C2024696600FD58E4 /* udis86_stubs.c in Sources */ = {isa = PBXBuildFile; fileRef = 2AFD4C5A2024696600FD58E4 /* udis86_stubs.c */; };
+		2AFD4C5F2024726800FD58E4 /* xnu_override.h in Headers */ = {isa = PBXBuildFile; fileRef = 2AFD4C5D2024726800FD58E4 /* xnu_override.h */; };
+		2AFD4C602024726800FD58E4 /* xnu_override.c in Sources */ = {isa = PBXBuildFile; fileRef = 2AFD4C5E2024726800FD58E4 /* xnu_override.c */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		2AF3BE59202455F400B15E9E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2A346BE6202320F2002530AD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2AF3BE50202452D700B15E9E;
+			remoteInfo = udis86;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		2A346BEF202320F2002530AD /* Thunderbolt3Unblocker.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Thunderbolt3Unblocker.kext; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A346BF2202320F2002530AD /* Thunderbolt3Unblocker.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = Thunderbolt3Unblocker.c; sourceTree = "<group>"; };
 		2A346BF4202320F2002530AD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2A67AC3A202482E700B0241C /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
+		2A67AC3B2024857000B0241C /* LICENSE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = "<group>"; };
+		2AF3BE5F2024581A00B15E9E /* udis86 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = udis86; sourceTree = "<group>"; };
+		2AFD4C572024648300FD58E4 /* libudis86.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libudis86.a; path = udis86/libudis86/.libs/libudis86.a; sourceTree = "<group>"; };
+		2AFD4C5A2024696600FD58E4 /* udis86_stubs.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = udis86_stubs.c; sourceTree = "<group>"; };
+		2AFD4C5D2024726800FD58E4 /* xnu_override.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = xnu_override.h; sourceTree = "<group>"; };
+		2AFD4C5E2024726800FD58E4 /* xnu_override.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = xnu_override.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -21,6 +43,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2AFD4C582024648300FD58E4 /* libudis86.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -30,8 +53,12 @@
 		2A346BE5202320F2002530AD = {
 			isa = PBXGroup;
 			children = (
+				2A67AC3A202482E700B0241C /* README.md */,
+				2A67AC3B2024857000B0241C /* LICENSE.md */,
+				2AF3BE5F2024581A00B15E9E /* udis86 */,
 				2A346BF1202320F2002530AD /* Thunderbolt3Unblocker */,
 				2A346BF0202320F2002530AD /* Products */,
+				2AF3BE602024591600B15E9E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -46,10 +73,21 @@
 		2A346BF1202320F2002530AD /* Thunderbolt3Unblocker */ = {
 			isa = PBXGroup;
 			children = (
+				2AFD4C5A2024696600FD58E4 /* udis86_stubs.c */,
 				2A346BF2202320F2002530AD /* Thunderbolt3Unblocker.c */,
+				2AFD4C5D2024726800FD58E4 /* xnu_override.h */,
+				2AFD4C5E2024726800FD58E4 /* xnu_override.c */,
 				2A346BF4202320F2002530AD /* Info.plist */,
 			);
 			path = Thunderbolt3Unblocker;
+			sourceTree = "<group>";
+		};
+		2AF3BE602024591600B15E9E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2AFD4C572024648300FD58E4 /* libudis86.a */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -59,10 +97,28 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2AFD4C5F2024726800FD58E4 /* xnu_override.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
+
+/* Begin PBXLegacyTarget section */
+		2AF3BE50202452D700B15E9E /* libudis86 */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "-c \"[ ! -f ./configure ] && ./autogen.sh; [ ! -f Makefile ] && ./configure --enable-static=yes --enable-shared=no; make -C libudis86 $(ACTION)\"";
+			buildConfigurationList = 2AF3BE51202452D700B15E9E /* Build configuration list for PBXLegacyTarget "libudis86" */;
+			buildPhases = (
+			);
+			buildToolPath = /bin/sh;
+			buildWorkingDirectory = udis86;
+			dependencies = (
+			);
+			name = libudis86;
+			passBuildSettingsInEnvironment = 1;
+			productName = udis86;
+		};
+/* End PBXLegacyTarget section */
 
 /* Begin PBXNativeTarget section */
 		2A346BEE202320F2002530AD /* Thunderbolt3Unblocker */ = {
@@ -77,6 +133,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				2AF3BE5A202455F400B15E9E /* PBXTargetDependency */,
 			);
 			name = Thunderbolt3Unblocker;
 			productName = Thunderbolt3Unblocker;
@@ -95,6 +152,9 @@
 					2A346BEE202320F2002530AD = {
 						CreatedOnToolsVersion = 9.3;
 					};
+					2AF3BE50202452D700B15E9E = {
+						CreatedOnToolsVersion = 9.3;
+					};
 				};
 			};
 			buildConfigurationList = 2A346BE9202320F2002530AD /* Build configuration list for PBXProject "Thunderbolt3Unblocker" */;
@@ -109,6 +169,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
+				2AF3BE50202452D700B15E9E /* libudis86 */,
 				2A346BEE202320F2002530AD /* Thunderbolt3Unblocker */,
 			);
 		};
@@ -119,6 +180,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2A67AC3C2024857000B0241C /* LICENSE.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -129,11 +191,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2AFD4C5C2024696600FD58E4 /* udis86_stubs.c in Sources */,
+				2AFD4C602024726800FD58E4 /* xnu_override.c in Sources */,
 				2A346BF3202320F2002530AD /* Thunderbolt3Unblocker.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		2AF3BE5A202455F400B15E9E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2AF3BE50202452D700B15E9E /* libudis86 */;
+			targetProxy = 2AF3BE59202455F400B15E9E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		2A346BF5202320F2002530AD /* Debug */ = {
@@ -251,12 +323,17 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = G8YUU89437;
 				INFOPLIST_FILE = Thunderbolt3Unblocker/Info.plist;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/udis86/libudis86/.libs",
+				);
 				MODULE_NAME = es.govost.ryan.Thunderbolt3Unblocker;
 				MODULE_START = Thunderbolt3Unblocker_start;
 				MODULE_STOP = Thunderbolt3Unblocker_stop;
 				MODULE_VERSION = 1.0.0d1;
 				PRODUCT_BUNDLE_IDENTIFIER = es.govost.ryan.Thunderbolt3Unblocker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/udis86";
 				WRAPPER_EXTENSION = kext;
 			};
 			name = Debug;
@@ -267,13 +344,41 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = G8YUU89437;
 				INFOPLIST_FILE = Thunderbolt3Unblocker/Info.plist;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/udis86/libudis86/.libs",
+				);
 				MODULE_NAME = es.govost.ryan.Thunderbolt3Unblocker;
 				MODULE_START = Thunderbolt3Unblocker_start;
 				MODULE_STOP = Thunderbolt3Unblocker_stop;
 				MODULE_VERSION = 1.0.0d1;
 				PRODUCT_BUNDLE_IDENTIFIER = es.govost.ryan.Thunderbolt3Unblocker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/udis86";
 				WRAPPER_EXTENSION = kext;
+			};
+			name = Release;
+		};
+		2AF3BE52202452D700B15E9E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEBUGGING_SYMBOLS = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = G8YUU89437;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		2AF3BE53202452D700B15E9E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = G8YUU89437;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
 		};
@@ -294,6 +399,15 @@
 			buildConfigurations = (
 				2A346BF8202320F2002530AD /* Debug */,
 				2A346BF9202320F2002530AD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2AF3BE51202452D700B15E9E /* Build configuration list for PBXLegacyTarget "libudis86" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2AF3BE52202452D700B15E9E /* Debug */,
+				2AF3BE53202452D700B15E9E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
