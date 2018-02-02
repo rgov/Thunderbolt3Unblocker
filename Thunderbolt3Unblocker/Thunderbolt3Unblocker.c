@@ -16,19 +16,28 @@ void _ZN24IOThunderboltSwitchType321shouldSkipEnumerationEv(void);
 
 
 // Here's a simple set of functions to patch
-int patch_me(void) {
+int patch_me(int n __unused) {
     return 42;
 }
 
-int (*orig_patch_me)(void) = NULL;
-int new_patch_me(void) {
-    return 43;
-    //return orig_patch_me() + 1;
+int (*orig_patch_me)(int) = NULL;
+int new_patch_me(int n) {
+    // Our patch target cannot be too small, so we have to do some stuff.
+    int a = 1, b = 1;
+    for (int i = 0; i < n; i ++) {
+        int tmp = a;
+        a = b;
+        b += tmp;
+    }
+    return a;
 }
 
 
 kern_return_t Thunderbolt3Unblocker_start(kmod_info_t *ki, void *d)
 {
+    volatile int n = 100;
+    os_log(OS_LOG_DEFAULT, "Before patch, return value %d\n", patch_me(n));
+    
     kern_return_t err;
     err = xnu_override(patch_me, new_patch_me, (void **)&orig_patch_me);
     if (err != KERN_SUCCESS) {
@@ -37,8 +46,8 @@ kern_return_t Thunderbolt3Unblocker_start(kmod_info_t *ki, void *d)
     }
     
     os_log(OS_LOG_DEFAULT, "Patched function, about to call...\n");
-    //os_log(OS_LOG_DEFAULT, "Patched function, return value %d\n", patch_me());
-    //os_log(OS_LOG_DEFAULT, "Original function, return value %d\n", orig_patch_me());
+    //os_log(OS_LOG_DEFAULT, "Patched function, return value %d\n", patch_me(n));
+    //os_log(OS_LOG_DEFAULT, "Original function, return value %d\n", orig_patch_me(n));
     
     return KERN_SUCCESS;
 }
