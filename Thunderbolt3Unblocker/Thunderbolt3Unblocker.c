@@ -45,5 +45,11 @@ kern_return_t Thunderbolt3Unblocker_start(kmod_info_t *ki, void *d)
 
 kern_return_t Thunderbolt3Unblocker_stop(kmod_info_t *ki, void *d)
 {
+    // Revert the patch if it is active
+    if (orig_patch_me != NULL) {
+        os_log(OS_LOG_DEFAULT, "Active patch detected at unload, reverting\n");
+        xnu_unpatch(patch_me, orig_patch_me);
+    }
+    
     return KERN_SUCCESS;
 }
