@@ -17,11 +17,6 @@ void _ZN24IOThunderboltSwitchType321shouldSkipEnumerationEv(void);
 
 // Here's a simple set of functions to patch
 int patch_me(int n __unused) {
-    return 42;
-}
-
-int (*orig_patch_me)(int) = NULL;
-int new_patch_me(int n) {
     // Our patch target cannot be too small, so we have to do some stuff.
     int a = 1, b = 1;
     for (int i = 0; i < n; i ++) {
@@ -30,6 +25,11 @@ int new_patch_me(int n) {
         b += tmp;
     }
     return a;
+}
+
+int (*orig_patch_me)(int) = NULL;
+int new_patch_me(int n) {
+    return 42;
 }
 
 
