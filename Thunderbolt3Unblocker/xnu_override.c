@@ -18,6 +18,8 @@
 
 // Basic idea copied from mach_override/mach_override.c
 #define kOriginalInstructionsSize 32
+#define kIslandJumpOffset (kOriginalInstructionsSize + 2)
+#define kPatchJumpOffset 2
 
 char kIslandTemplate[] = {
     // kOriginalInstructionsSize nop instructions so that we
@@ -27,15 +29,21 @@ char kIslandTemplate[] = {
     0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
     0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
     
-    // Now the real jump instruction
-    0xFF, 0x25, 0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00
+    // Now our code to jump to the desired place
+    0x48, 0xA1, 0xFF, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, // mov %rax, ...
+    0xFF, 0xE0,                                                 // jmp %rax
+};
+
+char kPatchTemplate[] = {
+    // Our code to jump to the desired place
+    0x48, 0xA1, 0xFF, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, // mov %rax, ...
+    0xFF, 0xE0,                                                 // jmp %rax
 };
 
 typedef struct {
     unsigned int insn_bytes;
     char instructions[sizeof(kIslandTemplate)];
+    // TODO: Make this a linked list, so we can unpatch at unload
 } BranchIsland;
 
 
@@ -55,6 +63,13 @@ static inline uintptr_t get_cr0(void)
 static inline void set_cr0(uintptr_t value)
 {
     __asm__ volatile("mov %0, %%cr0" : : "r" (value));
+}
+
+static void dump(void *addr, int count) {
+    for (int i = 0; i < count; i ++) {
+        os_log(OS_LOG_DEFAULT, "%02x", ((uint8_t *)addr)[i]);
+    }
+    os_log(OS_LOG_DEFAULT, "\n");
 }
 
 
@@ -94,7 +109,7 @@ kern_return_t xnu_override(void *target, const void *replacement, void **origina
   
     island->insn_bytes = 0;
     void *insn_ptr = &island->instructions;
-    while (island->insn_bytes < 10 /* size of a jump */) {
+    while (island->insn_bytes < sizeof(kPatchTemplate)) {
         if (!ud_disassemble(&u)) {
             os_log_error(OS_LOG_DEFAULT, "Cannot disassemble instruction, aborting\n");
             goto fail;
@@ -110,22 +125,24 @@ kern_return_t xnu_override(void *target, const void *replacement, void **origina
         insn_ptr += ud_insn_len(&u);
     }
     
-    // Ok, the branch island is almost ready, we just need to add a jump that
-    // returns control flow.
-    // TODO: Write <jmp target + X> to the island
+    // Ok, the branch island is almost ready, we just need to insert the address
+    // we want it to jump to, which will be the first instruction after the ones
+    // we copied into the island.
+    uint64_t jumpTo = (uint64_t)target + island->insn_bytes;
+    bcopy(&jumpTo, &island->instructions[kIslandJumpOffset], sizeof(uint64_t));
 
-    // Now we need to patch the target to insert a jump to the new code
+    // Now we need to patch the target to insert a jump to the replacement code
     disable_write_protection();
-    // TODO: Write <jmp replacement> to the target
+    jumpTo = (uint64_t)replacement;
+    bcopy(kPatchTemplate, target, sizeof(kPatchTemplate));
+    bcopy(&jumpTo, target + kPatchJumpOffset, sizeof(uint64_t));
     enable_write_protection();
     
     // Return a pointer to the branch island, which is how to call the original
     // function.
     *original = &island->instructions;
     
-    //
-    os_log(OS_LOG_DEFAULT, "Copied %d bytes to branch island\n", island->insn_bytes);
-    
+    os_log(OS_LOG_DEFAULT, "Patch applied\n");
     return KERN_SUCCESS;
     
 fail:
@@ -138,7 +155,7 @@ kern_return_t xnu_unpatch(void *target, const void *original) {
     os_log_error(OS_LOG_DEFAULT, "Reverting patch\n");
     
     // Find the BranchIsland
-    BranchIsland *island = (void *)original - kOriginalInstructionsSize - offsetof(BranchIsland, instructions);
+    BranchIsland *island = (void *)original - offsetof(BranchIsland, instructions);
     
     // Just copy instructions back from the island
     disable_write_protection();
