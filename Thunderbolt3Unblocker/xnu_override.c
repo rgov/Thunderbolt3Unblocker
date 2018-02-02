@@ -73,6 +73,13 @@ static inline void set_cr0(uintptr_t value)
     __asm__ volatile("mov %0, %%cr0" : : "r" (value));
 }
 
+static inline void flush_tlb(void) {
+    uintptr_t cr3;
+    __asm__ volatile("mov %%cr3, %0" : "=r" (cr3));
+    __asm__ volatile("mov %0, %%cr3" : : "r" (cr3));
+}
+
+
 static void dump(void *addr, int count) {
     for (int i = 0; i < count; i ++) {
         os_log(OS_LOG_DEFAULT, "%02x", ((uint8_t *)addr)[i]);
@@ -152,6 +159,9 @@ kern_return_t xnu_override(void *target, const void *replacement, void **origina
     bcopy(kPatchTemplate, target, sizeof(kPatchTemplate));
     bcopy(&jumpTo, target + kPatchJumpOffset, sizeof(uint64_t));
     enable_write_protection();
+    
+    // Flush TLB to evict caches
+    flush_tlb();
     
     // Return a pointer to the branch island, which is how to call the original
     // function.
