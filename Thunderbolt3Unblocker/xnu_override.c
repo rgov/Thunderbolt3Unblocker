@@ -6,7 +6,10 @@
 //  Copyright © 2018 Ryan Govostes. All rights reserved.
 //
 
+#include <kern/task.h>
 #include <libkern/OSMalloc.h>
+#include <mach/mach_vm.h>
+#include <mach/vm_map.h>
 #include <os/log.h>
 #include <string.h>
 
@@ -14,6 +17,10 @@
 #include "udis86.h"
 
 #include "xnu_override.h"
+
+
+// Private function we need to be able to get the kernel_map
+vm_map_t get_task_map(task_t);
 
 
 // Basic idea copied from mach_override/mach_override.c
@@ -98,7 +105,7 @@ kern_return_t xnu_override(void *target, const void *replacement, void **origina
     // Allocate a branch island
     os_log(OS_LOG_DEFAULT, "Creating branch island\n");
     
-    BranchIsland *island = OSMalloc(sizeof(BranchIsland), tag);
+    BranchIsland *island = OSMalloc(PAGE_SIZE, tag);
     bcopy(kIslandTemplate, &island->instructions, sizeof(island->instructions));
     
     // Now we will use the disassembler to copy instructions over one by one
@@ -132,6 +139,13 @@ kern_return_t xnu_override(void *target, const void *replacement, void **origina
     uint64_t jumpTo = (uint64_t)target + island->insn_bytes;
     bcopy(&jumpTo, &island->instructions[kIslandJumpOffset], sizeof(uint64_t));
 
+    // The branch island is ready. Switch from writable to executable.
+    kern_return_t err = vm_protect(get_task_map(kernel_task), (vm_address_t)island, PAGE_SIZE, false, VM_PROT_EXECUTE | VM_PROT_READ);
+    if (err != KERN_SUCCESS) {
+        os_log_error(OS_LOG_DEFAULT, "Failed to mark island executable, aborting\n");
+        goto fail;
+    }
+    
     // Now we need to patch the target to insert a jump to the replacement code
     disable_write_protection();
     jumpTo = (uint64_t)replacement;
@@ -147,7 +161,7 @@ kern_return_t xnu_override(void *target, const void *replacement, void **origina
     return KERN_SUCCESS;
     
 fail:
-    OSFree(island, sizeof(BranchIsland), tag);
+    OSFree(island, PAGE_SIZE, tag);
     return KERN_ABORTED;
 }
 
