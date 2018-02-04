@@ -51,12 +51,14 @@ char kPatchTemplate[] = {
     0xFF, 0xE0,                                                 // jmp %rax
 };
 
-typedef struct {
+typedef struct BranchIsland {
+    void *target;
     unsigned int insn_bytes;
     char instructions[sizeof(kIslandTemplate)];
-    // TODO: Make this a linked list, so we can unpatch at unload
+    struct BranchIsland *nextIsland; // linked list for efficient unloading
 } BranchIsland;
 
+BranchIsland *firstIsland = NULL;
 
 static OSMallocTag tag = NULL;
 
@@ -116,6 +118,8 @@ kern_return_t xnu_override(void *target, const void *replacement, void **origina
     os_log_debug(OS_LOG_DEFAULT, LOG_PREFIX "Creating branch island\n");
     
     BranchIsland *island = OSMalloc(PAGE_SIZE, tag);
+    island->target = target;
+    island->nextIsland = NULL;
     bcopy(kIslandTemplate, &island->instructions, sizeof(island->instructions));
     
     // Now we will use the disassembler to copy instructions over one by one
@@ -174,6 +178,17 @@ kern_return_t xnu_override(void *target, const void *replacement, void **origina
     // function.
     *original = &island->instructions;
     
+    // Add this patch to the linked list
+    if (firstIsland == NULL) {
+        firstIsland = island;
+    } else {
+        BranchIsland *islandPtr = firstIsland;
+        while (islandPtr->nextIsland != NULL) {
+            islandPtr = islandPtr->nextIsland;
+        }
+        islandPtr->nextIsland = island;
+    }
+    
     os_log(OS_LOG_DEFAULT, LOG_PREFIX "Patch applied\n");
     return KERN_SUCCESS;
     
@@ -183,16 +198,44 @@ fail:
 }
 
 
-kern_return_t xnu_unpatch(void *target, const void *original) {
+kern_return_t xnu_unpatch(const void *target) {
     os_log(OS_LOG_DEFAULT, LOG_PREFIX "Reverting patch\n");
     
-    // Find the BranchIsland
-    BranchIsland *island = (void *)original - offsetof(BranchIsland, instructions);
+    // Scan through the list of branch islands for this target
+    BranchIsland *island = firstIsland;
+    BranchIsland *prevIsland = NULL;
+    while (island != NULL && island->target != target) {
+        prevIsland = island;
+        island = island->nextIsland;
+    }
     
-    // Just copy instructions back from the island
+    if (!island) {
+        os_log_error(OS_LOG_DEFAULT, LOG_PREFIX "Unpatch target not found\n");
+        return KERN_ABORTED;
+    }
+    
+    // Update the linked list to skip over this island
+    if (prevIsland == NULL) {
+        firstIsland = island->nextIsland;
+    } else {
+        prevIsland->nextIsland = island->nextIsland;
+    }
+    
+    // Copy instructions back to the target and destroy the island
     disable_write_protection();
-    bcopy(island->instructions, target, island->insn_bytes);
+    bcopy(island->instructions, island->target, island->insn_bytes);
+    OSFree(island, PAGE_SIZE, tag);
     enable_write_protection();
     
+    return KERN_SUCCESS;
+}
+
+
+kern_return_t xnu_unpatch_all(void) {
+    while (firstIsland != NULL) {
+        kern_return_t err = xnu_unpatch(firstIsland->target);
+        if (err != KERN_SUCCESS)
+            return err;
+    }
     return KERN_SUCCESS;
 }

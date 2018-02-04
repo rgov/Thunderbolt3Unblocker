@@ -12,6 +12,7 @@
 #include <mach/kern_return.h>
 
 kern_return_t xnu_override(void *target, const void *replacement, void **original);
-kern_return_t xnu_unpatch(void *target, const void *original);
+kern_return_t xnu_unpatch(const void *target);
+kern_return_t xnu_unpatch_all(void);
 
 #endif /* xnu_override_h */
