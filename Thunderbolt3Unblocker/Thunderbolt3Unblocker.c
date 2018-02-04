@@ -35,7 +35,7 @@ int new_patch_me(int n) {
 
 kern_return_t Thunderbolt3Unblocker_start(kmod_info_t *ki, void *d)
 {
-    volatile int n = 100;
+    volatile int n = 40;
     os_log(OS_LOG_DEFAULT, "Before patch, return value %d\n", patch_me(n));
     
     kern_return_t err;
@@ -46,8 +46,8 @@ kern_return_t Thunderbolt3Unblocker_start(kmod_info_t *ki, void *d)
     }
     
     os_log(OS_LOG_DEFAULT, "Patched function, about to call...\n");
-    //os_log(OS_LOG_DEFAULT, "Patched function, return value %d\n", patch_me(n));
-    //os_log(OS_LOG_DEFAULT, "Original function, return value %d\n", orig_patch_me(n));
+    os_log(OS_LOG_DEFAULT, "Patched function, return value %d\n", patch_me(n));
+    os_log(OS_LOG_DEFAULT, "Original function, return value %d\n", orig_patch_me(n));
     
     return KERN_SUCCESS;
 }
