@@ -1,3 +1,3 @@
 [submodule "udis86"]
-	path = udis86
+	path = xnu_override/udis86
 	url = https://github.com/vmt/udis86.git

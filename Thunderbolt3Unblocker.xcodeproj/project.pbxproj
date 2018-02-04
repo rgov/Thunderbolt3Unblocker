@@ -16,16 +16,22 @@
 		2AD4175D202751D7002F1EBF /* xnu_override_test.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A82EDF120273F5D00BD5275 /* xnu_override_test.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2AD4175E202751E5002F1EBF /* libudis86.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AFD4C572024648300FD58E4 /* libudis86.a */; };
 		2AD4175F202751EA002F1EBF /* libxnu_override.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AD4169020275100002F1EBF /* libxnu_override.a */; };
-		2AD4176120275224002F1EBF /* Kernel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AD4176020275224002F1EBF /* Kernel.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		2AF3BE59202455F400B15E9E /* PBXContainerItemProxy */ = {
+		2AD4176220275564002F1EBF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2A346BE6202320F2002530AD /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 2AF3BE50202452D700B15E9E;
-			remoteInfo = udis86;
+			remoteInfo = libudis86;
+		};
+		2AD417642027556C002F1EBF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2A346BE6202320F2002530AD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2AD4168F20275100002F1EBF;
+			remoteInfo = xnu_override;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -59,7 +65,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2AD4176120275224002F1EBF /* Kernel.framework in Frameworks */,
 				2AD4175E202751E5002F1EBF /* libudis86.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -72,7 +77,6 @@
 			children = (
 				2A67AC3A202482E700B0241C /* README.md */,
 				2A67AC3B2024857000B0241C /* LICENSE.md */,
-				2AF3BE5F2024581A00B15E9E /* udis86 */,
 				2AD416952027514D002F1EBF /* xnu_override */,
 				2A346BF1202320F2002530AD /* Thunderbolt3Unblocker */,
 				2A346BF0202320F2002530AD /* Products */,
@@ -101,6 +105,7 @@
 		2AD416952027514D002F1EBF /* xnu_override */ = {
 			isa = PBXGroup;
 			children = (
+				2AF3BE5F2024581A00B15E9E /* udis86 */,
 				2AFD4C5A2024696600FD58E4 /* udis86_stubs.c */,
 				2AFD4C5D2024726800FD58E4 /* xnu_override.h */,
 				2AFD4C5E2024726800FD58E4 /* xnu_override.c */,
@@ -148,7 +153,7 @@
 			buildPhases = (
 			);
 			buildToolPath = /bin/sh;
-			buildWorkingDirectory = udis86;
+			buildWorkingDirectory = xnu_override/udis86;
 			dependencies = (
 			);
 			name = libudis86;
@@ -170,7 +175,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				2AF3BE5A202455F400B15E9E /* PBXTargetDependency */,
+				2AD417652027556C002F1EBF /* PBXTargetDependency */,
 			);
 			name = Thunderbolt3Unblocker;
 			productName = Thunderbolt3Unblocker;
@@ -188,6 +193,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				2AD4176320275564002F1EBF /* PBXTargetDependency */,
 			);
 			name = xnu_override;
 			productName = xnu_override;
@@ -269,10 +275,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		2AF3BE5A202455F400B15E9E /* PBXTargetDependency */ = {
+		2AD4176320275564002F1EBF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 2AF3BE50202452D700B15E9E /* libudis86 */;
-			targetProxy = 2AF3BE59202455F400B15E9E /* PBXContainerItemProxy */;
+			targetProxy = 2AD4176220275564002F1EBF /* PBXContainerItemProxy */;
+		};
+		2AD417652027556C002F1EBF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2AD4168F20275100002F1EBF /* xnu_override */;
+			targetProxy = 2AD417642027556C002F1EBF /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -428,10 +439,10 @@
 				HEADER_SEARCH_PATHS = "$(SDKROOT)/System/Library/Frameworks/Kernel.framework/Headers";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/udis86/libudis86/.libs",
+					"$(PROJECT_DIR)/xnu_override/udis86/libudis86/.libs",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/udis86";
+				USER_HEADER_SEARCH_PATHS = "$(inherited) $(PROJECT_DIR)/xnu_override/udis86";
 			};
 			name = Debug;
 		};
@@ -444,10 +455,10 @@
 				HEADER_SEARCH_PATHS = "$(SDKROOT)/System/Library/Frameworks/Kernel.framework/Headers";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/udis86/libudis86/.libs",
+					"$(PROJECT_DIR)/xnu_override/udis86/libudis86/.libs",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/udis86";
+				USER_HEADER_SEARCH_PATHS = "$(inherited) $(PROJECT_DIR)/xnu_override/udis86";
 			};
 			name = Release;
 		};
