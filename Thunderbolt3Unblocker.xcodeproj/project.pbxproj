@@ -9,11 +9,14 @@
 /* Begin PBXBuildFile section */
 		2A346BF3202320F2002530AD /* Thunderbolt3Unblocker.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A346BF2202320F2002530AD /* Thunderbolt3Unblocker.c */; };
 		2A67AC3C2024857000B0241C /* LICENSE.md in Resources */ = {isa = PBXBuildFile; fileRef = 2A67AC3B2024857000B0241C /* LICENSE.md */; };
-		2A82EDF020273E0000BD5275 /* xnu_override_test.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A82EDEF20273E0000BD5275 /* xnu_override_test.c */; };
-		2AFD4C582024648300FD58E4 /* libudis86.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AFD4C572024648300FD58E4 /* libudis86.a */; };
-		2AFD4C5C2024696600FD58E4 /* udis86_stubs.c in Sources */ = {isa = PBXBuildFile; fileRef = 2AFD4C5A2024696600FD58E4 /* udis86_stubs.c */; };
-		2AFD4C5F2024726800FD58E4 /* xnu_override.h in Headers */ = {isa = PBXBuildFile; fileRef = 2AFD4C5D2024726800FD58E4 /* xnu_override.h */; };
-		2AFD4C602024726800FD58E4 /* xnu_override.c in Sources */ = {isa = PBXBuildFile; fileRef = 2AFD4C5E2024726800FD58E4 /* xnu_override.c */; };
+		2AD41759202751A4002F1EBF /* udis86_stubs.c in Sources */ = {isa = PBXBuildFile; fileRef = 2AFD4C5A2024696600FD58E4 /* udis86_stubs.c */; };
+		2AD4175A202751A8002F1EBF /* xnu_override.c in Sources */ = {isa = PBXBuildFile; fileRef = 2AFD4C5E2024726800FD58E4 /* xnu_override.c */; };
+		2AD4175B202751AA002F1EBF /* xnu_override_test.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A82EDEF20273E0000BD5275 /* xnu_override_test.c */; };
+		2AD4175C202751D5002F1EBF /* xnu_override.h in Headers */ = {isa = PBXBuildFile; fileRef = 2AFD4C5D2024726800FD58E4 /* xnu_override.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2AD4175D202751D7002F1EBF /* xnu_override_test.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A82EDF120273F5D00BD5275 /* xnu_override_test.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2AD4175E202751E5002F1EBF /* libudis86.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AFD4C572024648300FD58E4 /* libudis86.a */; };
+		2AD4175F202751EA002F1EBF /* libxnu_override.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AD4169020275100002F1EBF /* libxnu_override.a */; };
+		2AD4176120275224002F1EBF /* Kernel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AD4176020275224002F1EBF /* Kernel.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +37,8 @@
 		2A67AC3B2024857000B0241C /* LICENSE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = "<group>"; };
 		2A82EDEF20273E0000BD5275 /* xnu_override_test.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = xnu_override_test.c; sourceTree = "<group>"; };
 		2A82EDF120273F5D00BD5275 /* xnu_override_test.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = xnu_override_test.h; sourceTree = "<group>"; };
+		2AD4169020275100002F1EBF /* libxnu_override.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libxnu_override.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		2AD4176020275224002F1EBF /* Kernel.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Kernel.framework; path = System/Library/Frameworks/Kernel.framework; sourceTree = SDKROOT; };
 		2AF3BE5F2024581A00B15E9E /* udis86 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = udis86; sourceTree = "<group>"; };
 		2AFD4C572024648300FD58E4 /* libudis86.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libudis86.a; path = udis86/libudis86/.libs/libudis86.a; sourceTree = "<group>"; };
 		2AFD4C5A2024696600FD58E4 /* udis86_stubs.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = udis86_stubs.c; sourceTree = "<group>"; };
@@ -46,7 +51,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2AFD4C582024648300FD58E4 /* libudis86.a in Frameworks */,
+				2AD4175F202751EA002F1EBF /* libxnu_override.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2AD4168D20275100002F1EBF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2AD4176120275224002F1EBF /* Kernel.framework in Frameworks */,
+				2AD4175E202751E5002F1EBF /* libudis86.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,6 +73,7 @@
 				2A67AC3A202482E700B0241C /* README.md */,
 				2A67AC3B2024857000B0241C /* LICENSE.md */,
 				2AF3BE5F2024581A00B15E9E /* udis86 */,
+				2AD416952027514D002F1EBF /* xnu_override */,
 				2A346BF1202320F2002530AD /* Thunderbolt3Unblocker */,
 				2A346BF0202320F2002530AD /* Products */,
 				2AF3BE602024591600B15E9E /* Frameworks */,
@@ -69,6 +84,7 @@
 			isa = PBXGroup;
 			children = (
 				2A346BEF202320F2002530AD /* Thunderbolt3Unblocker.kext */,
+				2AD4169020275100002F1EBF /* libxnu_override.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -76,20 +92,28 @@
 		2A346BF1202320F2002530AD /* Thunderbolt3Unblocker */ = {
 			isa = PBXGroup;
 			children = (
-				2AFD4C5A2024696600FD58E4 /* udis86_stubs.c */,
 				2A346BF2202320F2002530AD /* Thunderbolt3Unblocker.c */,
-				2AFD4C5D2024726800FD58E4 /* xnu_override.h */,
-				2AFD4C5E2024726800FD58E4 /* xnu_override.c */,
-				2A82EDF120273F5D00BD5275 /* xnu_override_test.h */,
-				2A82EDEF20273E0000BD5275 /* xnu_override_test.c */,
 				2A346BF4202320F2002530AD /* Info.plist */,
 			);
 			path = Thunderbolt3Unblocker;
 			sourceTree = "<group>";
 		};
+		2AD416952027514D002F1EBF /* xnu_override */ = {
+			isa = PBXGroup;
+			children = (
+				2AFD4C5A2024696600FD58E4 /* udis86_stubs.c */,
+				2AFD4C5D2024726800FD58E4 /* xnu_override.h */,
+				2AFD4C5E2024726800FD58E4 /* xnu_override.c */,
+				2A82EDF120273F5D00BD5275 /* xnu_override_test.h */,
+				2A82EDEF20273E0000BD5275 /* xnu_override_test.c */,
+			);
+			path = xnu_override;
+			sourceTree = "<group>";
+		};
 		2AF3BE602024591600B15E9E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2AD4176020275224002F1EBF /* Kernel.framework */,
 				2AFD4C572024648300FD58E4 /* libudis86.a */,
 			);
 			name = Frameworks;
@@ -102,7 +126,15 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2AFD4C5F2024726800FD58E4 /* xnu_override.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2AD4168E20275100002F1EBF /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2AD4175C202751D5002F1EBF /* xnu_override.h in Headers */,
+				2AD4175D202751D7002F1EBF /* xnu_override_test.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -145,6 +177,23 @@
 			productReference = 2A346BEF202320F2002530AD /* Thunderbolt3Unblocker.kext */;
 			productType = "com.apple.product-type.kernel-extension";
 		};
+		2AD4168F20275100002F1EBF /* xnu_override */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2AD4169120275100002F1EBF /* Build configuration list for PBXNativeTarget "xnu_override" */;
+			buildPhases = (
+				2AD4168C20275100002F1EBF /* Sources */,
+				2AD4168D20275100002F1EBF /* Frameworks */,
+				2AD4168E20275100002F1EBF /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = xnu_override;
+			productName = xnu_override;
+			productReference = 2AD4169020275100002F1EBF /* libxnu_override.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -156,6 +205,10 @@
 				TargetAttributes = {
 					2A346BEE202320F2002530AD = {
 						CreatedOnToolsVersion = 9.3;
+						ProvisioningStyle = Automatic;
+					};
+					2AD4168F20275100002F1EBF = {
+						CreatedOnToolsVersion = 9.2;
 						ProvisioningStyle = Automatic;
 					};
 					2AF3BE50202452D700B15E9E = {
@@ -177,6 +230,7 @@
 			projectRoot = "";
 			targets = (
 				2AF3BE50202452D700B15E9E /* libudis86 */,
+				2AD4168F20275100002F1EBF /* xnu_override */,
 				2A346BEE202320F2002530AD /* Thunderbolt3Unblocker */,
 			);
 		};
@@ -198,10 +252,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2AFD4C5C2024696600FD58E4 /* udis86_stubs.c in Sources */,
-				2A82EDF020273E0000BD5275 /* xnu_override_test.c in Sources */,
-				2AFD4C602024726800FD58E4 /* xnu_override.c in Sources */,
 				2A346BF3202320F2002530AD /* Thunderbolt3Unblocker.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2AD4168C20275100002F1EBF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2AD41759202751A4002F1EBF /* udis86_stubs.c in Sources */,
+				2AD4175A202751A8002F1EBF /* xnu_override.c in Sources */,
+				2AD4175B202751AA002F1EBF /* xnu_override_test.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -331,17 +392,12 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = G8YUU89437;
 				INFOPLIST_FILE = Thunderbolt3Unblocker/Info.plist;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/udis86/libudis86/.libs",
-				);
 				MODULE_NAME = es.govost.ryan.Thunderbolt3Unblocker;
 				MODULE_START = Thunderbolt3Unblocker_start;
 				MODULE_STOP = Thunderbolt3Unblocker_stop;
 				MODULE_VERSION = 1.0.0d1;
 				PRODUCT_BUNDLE_IDENTIFIER = es.govost.ryan.Thunderbolt3Unblocker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/udis86";
 				WRAPPER_EXTENSION = kext;
 			};
 			name = Debug;
@@ -352,18 +408,46 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = G8YUU89437;
 				INFOPLIST_FILE = Thunderbolt3Unblocker/Info.plist;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/udis86/libudis86/.libs",
-				);
 				MODULE_NAME = es.govost.ryan.Thunderbolt3Unblocker;
 				MODULE_START = Thunderbolt3Unblocker_start;
 				MODULE_STOP = Thunderbolt3Unblocker_stop;
 				MODULE_VERSION = 1.0.0d1;
 				PRODUCT_BUNDLE_IDENTIFIER = es.govost.ryan.Thunderbolt3Unblocker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/udis86";
 				WRAPPER_EXTENSION = kext;
+			};
+			name = Release;
+		};
+		2AD4169220275100002F1EBF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = G8YUU89437;
+				EXECUTABLE_PREFIX = lib;
+				HEADER_SEARCH_PATHS = "$(SDKROOT)/System/Library/Frameworks/Kernel.framework/Headers";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/udis86/libudis86/.libs",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/udis86";
+			};
+			name = Debug;
+		};
+		2AD4169320275100002F1EBF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = G8YUU89437;
+				EXECUTABLE_PREFIX = lib;
+				HEADER_SEARCH_PATHS = "$(SDKROOT)/System/Library/Frameworks/Kernel.framework/Headers";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/udis86/libudis86/.libs",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/udis86";
 			};
 			name = Release;
 		};
@@ -407,6 +491,15 @@
 			buildConfigurations = (
 				2A346BF8202320F2002530AD /* Debug */,
 				2A346BF9202320F2002530AD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2AD4169120275100002F1EBF /* Build configuration list for PBXNativeTarget "xnu_override" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2AD4169220275100002F1EBF /* Debug */,
+				2AD4169320275100002F1EBF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
