@@ -27,18 +27,18 @@ kern_return_t Thunderbolt3Unblocker_start(kmod_info_t *ki, void *d)
     kern_return_t err;
     err = xnu_override_test();
     if (err != KERN_SUCCESS) {
-        os_log_error(OS_LOG_DEFAULT, "Thunderbolt3Unlocker: Preflight sanity check failed, aborting\n");
+        os_log_error(OS_LOG_DEFAULT, "Thunderbolt3Unblocker: Preflight sanity check failed, aborting\n");
         return err;
     }
     
     // Now patch IOThunderboltSwitchType3::shouldSkipEnumeration()
     err = xnu_override(_ZN24IOThunderboltSwitchType321shouldSkipEnumerationEv, new_skip_enumeration, (void **)&orig_skip_enumeration);
     if (err != KERN_SUCCESS) {
-        os_log_error(OS_LOG_DEFAULT, "Thunderbolt3Unlocker: Failed to patch function\n");
+        os_log_error(OS_LOG_DEFAULT, "Thunderbolt3Unblocker: Failed to patch function\n");
         return err;
     }
     
-    os_log(OS_LOG_DEFAULT, "Thunderbolt3Unlocker: Patched IOThunderboltFamily\n");
+    os_log(OS_LOG_DEFAULT, "Thunderbolt3Unblocker: Patched IOThunderboltFamily\n");
     return KERN_SUCCESS;
 }
 
