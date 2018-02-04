@@ -40,7 +40,7 @@ char kIslandTemplate[] = {
     0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
     
     // Now our code to jump to the desired place
-    // FIXME: Bad! We don't want to screw up %rax on return from our function...
+    // XXX This clobbers %rax, which is a caller-saved register
     0x48, 0xB8, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, // mov %rax, ...
     0xFF, 0xE0,                                                 // jmp %rax
 };
