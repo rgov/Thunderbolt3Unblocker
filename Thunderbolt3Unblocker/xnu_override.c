@@ -19,6 +19,9 @@
 #include "xnu_override.h"
 
 
+#define LOG_PREFIX "xnu_override: "
+
+
 // Private function we need to be able to get the kernel_map
 vm_map_t get_task_map(task_t);
 
@@ -94,13 +97,13 @@ static void disable_write_protection(void) {
      TODO: Can we get some sort of lock so that we don't risk someone else
      changing cr0 at the same time?
      */
-    os_log(OS_LOG_DEFAULT, "Disabling kernel write protection\n");
+    os_log_debug(OS_LOG_DEFAULT, LOG_PREFIX "Disabling kernel write protection\n");
     set_cr0(get_cr0() & ~CR0_WP);
 }
 
 static void enable_write_protection(void) {
     // Re-enable write protection
-    os_log(OS_LOG_DEFAULT, "Re-enabling kernel write protection\n");
+    os_log_debug(OS_LOG_DEFAULT, LOG_PREFIX "Re-enabling kernel write protection\n");
     set_cr0(get_cr0() | CR0_WP);
 }
 
@@ -110,7 +113,7 @@ kern_return_t xnu_override(void *target, const void *replacement, void **origina
         tag = OSMalloc_Tagalloc("branch_island", OSMT_DEFAULT);
     
     // Allocate a branch island
-    os_log(OS_LOG_DEFAULT, "Creating branch island\n");
+    os_log_debug(OS_LOG_DEFAULT, LOG_PREFIX "Creating branch island\n");
     
     BranchIsland *island = OSMalloc(PAGE_SIZE, tag);
     bcopy(kIslandTemplate, &island->instructions, sizeof(island->instructions));
@@ -126,13 +129,13 @@ kern_return_t xnu_override(void *target, const void *replacement, void **origina
     void *insn_ptr = &island->instructions;
     while (island->insn_bytes < sizeof(kPatchTemplate)) {
         if (!ud_disassemble(&u)) {
-            os_log_error(OS_LOG_DEFAULT, "Cannot disassemble instruction, aborting\n");
+            os_log_error(OS_LOG_DEFAULT, LOG_PREFIX "Cannot disassemble instruction, aborting\n");
             goto fail;
         }
         
         island->insn_bytes += ud_insn_len(&u);
         if (island->insn_bytes > kOriginalInstructionsSize) {
-            os_log_error(OS_LOG_DEFAULT, "Out of space in branch island, aborting\n");
+            os_log_error(OS_LOG_DEFAULT, LOG_PREFIX "Out of space in branch island, aborting\n");
             goto fail;
         }
         
@@ -149,7 +152,7 @@ kern_return_t xnu_override(void *target, const void *replacement, void **origina
     // The branch island is ready. Switch from writable to executable.
     kern_return_t err = vm_protect(get_task_map(kernel_task), (vm_address_t)island, PAGE_SIZE, false, VM_PROT_EXECUTE | VM_PROT_READ);
     if (err != KERN_SUCCESS) {
-        os_log_error(OS_LOG_DEFAULT, "Failed to mark island executable, aborting\n");
+        os_log_error(OS_LOG_DEFAULT, LOG_PREFIX "Failed to mark island executable, aborting\n");
         goto fail;
     }
     
@@ -167,7 +170,7 @@ kern_return_t xnu_override(void *target, const void *replacement, void **origina
     // function.
     *original = &island->instructions;
     
-    os_log(OS_LOG_DEFAULT, "Patch applied\n");
+    os_log(OS_LOG_DEFAULT, LOG_PREFIX "Patch applied\n");
     return KERN_SUCCESS;
     
 fail:
@@ -177,7 +180,7 @@ fail:
 
 
 kern_return_t xnu_unpatch(void *target, const void *original) {
-    os_log_error(OS_LOG_DEFAULT, "Reverting patch\n");
+    os_log(OS_LOG_DEFAULT, LOG_PREFIX "Reverting patch\n");
     
     // Find the BranchIsland
     BranchIsland *island = (void *)original - offsetof(BranchIsland, instructions);
