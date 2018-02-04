@@ -139,6 +139,10 @@ kern_return_t xnu_override(void *target, const void *replacement, void **origina
             goto fail;
         }
         
+        if (ud_insn_len(&u) == 1 && memcmp(ud_insn_ptr(&u), "\xC3", 1) == 0) {
+            os_log(OS_LOG_DEFAULT, LOG_PREFIX "Patch target may be too short, proceed cautiously\n");
+        }
+        
         bcopy((void *)ud_insn_ptr(&u), insn_ptr, ud_insn_len(&u));
         insn_ptr += ud_insn_len(&u);
     }
