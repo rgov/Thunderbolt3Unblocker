@@ -14,6 +14,11 @@ unsupported in the first place. Use at your own peril.
 
 ## Installation
 
+To prepare your development environment, please run
+
+    git submodule update --init --recursive
+    brew install autoconf automake libtool
+
 It is recommended to keep System Integrity Protection on. To lower security
 just enough to allow this kernel extension to be loaded, use `csrutil enable
 --without kext`
