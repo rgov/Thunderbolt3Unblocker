@@ -10,6 +10,7 @@
 #include <libkern/OSMalloc.h>
 #include <mach/mach_vm.h>
 #include <mach/vm_map.h>
+#include <machine/machine_routines.h>
 #include <os/log.h>
 #include <string.h>
 
@@ -165,11 +166,13 @@ kern_return_t xnu_override(void *target, const void *replacement, void **origina
     }
     
     // Now we need to patch the target to insert a jump to the replacement code
+    boolean_t ints = ml_set_interrupts_enabled(false);
     disable_write_protection();
     jumpTo = (uint64_t)replacement;
     bcopy(kPatchTemplate, target, sizeof(kPatchTemplate));
     bcopy(&jumpTo, target + kPatchJumpOffset, sizeof(uint64_t));
     enable_write_protection();
+    ml_set_interrupts_enabled(ints);
     
     // Flush TLB to evict caches
     flush_tlb();
@@ -222,10 +225,12 @@ kern_return_t xnu_unpatch(const void *target) {
     }
     
     // Copy instructions back to the target and destroy the island
+    boolean_t ints = ml_set_interrupts_enabled(false);
     disable_write_protection();
     bcopy(island->instructions, island->target, island->insn_bytes);
     OSFree(island, PAGE_SIZE, tag);
     enable_write_protection();
+    ml_set_interrupts_enabled(ints);
     
     return KERN_SUCCESS;
 }
