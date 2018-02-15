@@ -20,8 +20,8 @@ To prepare your development environment, please run
     brew install autoconf automake libtool
 
 It is recommended to keep System Integrity Protection on. To lower security
-just enough to allow this kernel extension to be loaded, use `csrutil enable
---without kext`
+just enough to allow this kernel extension to be loaded without code signing, 
+use `csrutil enable --without kext`
 
 Build the project with Xcode. Make sure to change code signing settings as
 appropriate.
