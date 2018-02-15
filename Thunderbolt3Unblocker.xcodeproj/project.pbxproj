@@ -7,14 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2A26B4562035B34D006614FE /* zydis_stubs.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A26B4552035B34D006614FE /* zydis_stubs.c */; };
 		2A346BF3202320F2002530AD /* Thunderbolt3Unblocker.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A346BF2202320F2002530AD /* Thunderbolt3Unblocker.c */; };
 		2A67AC3C2024857000B0241C /* LICENSE.md in Resources */ = {isa = PBXBuildFile; fileRef = 2A67AC3B2024857000B0241C /* LICENSE.md */; };
-		2AD41759202751A4002F1EBF /* udis86_stubs.c in Sources */ = {isa = PBXBuildFile; fileRef = 2AFD4C5A2024696600FD58E4 /* udis86_stubs.c */; };
+		2A8B1EA62035B190008633C9 /* libZydis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AFD4C572024648300FD58E4 /* libZydis.a */; };
 		2AD4175A202751A8002F1EBF /* xnu_override.c in Sources */ = {isa = PBXBuildFile; fileRef = 2AFD4C5E2024726800FD58E4 /* xnu_override.c */; };
 		2AD4175B202751AA002F1EBF /* xnu_override_test.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A82EDEF20273E0000BD5275 /* xnu_override_test.c */; };
 		2AD4175C202751D5002F1EBF /* xnu_override.h in Headers */ = {isa = PBXBuildFile; fileRef = 2AFD4C5D2024726800FD58E4 /* xnu_override.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2AD4175D202751D7002F1EBF /* xnu_override_test.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A82EDF120273F5D00BD5275 /* xnu_override_test.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2AD4175E202751E5002F1EBF /* libudis86.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AFD4C572024648300FD58E4 /* libudis86.a */; };
 		2AD4175F202751EA002F1EBF /* libxnu_override.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AD4169020275100002F1EBF /* libxnu_override.a */; };
 /* End PBXBuildFile section */
 
@@ -24,7 +24,7 @@
 			containerPortal = 2A346BE6202320F2002530AD /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 2AF3BE50202452D700B15E9E;
-			remoteInfo = libudis86;
+			remoteInfo = libzydis;
 		};
 		2AD417642027556C002F1EBF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -36,6 +36,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2A26B4552035B34D006614FE /* zydis_stubs.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = zydis_stubs.c; sourceTree = "<group>"; };
 		2A346BEF202320F2002530AD /* Thunderbolt3Unblocker.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Thunderbolt3Unblocker.kext; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A346BF2202320F2002530AD /* Thunderbolt3Unblocker.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = Thunderbolt3Unblocker.c; sourceTree = "<group>"; };
 		2A346BF4202320F2002530AD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -45,9 +46,9 @@
 		2A82EDF120273F5D00BD5275 /* xnu_override_test.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = xnu_override_test.h; sourceTree = "<group>"; };
 		2AD4169020275100002F1EBF /* libxnu_override.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libxnu_override.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		2AD4176020275224002F1EBF /* Kernel.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Kernel.framework; path = System/Library/Frameworks/Kernel.framework; sourceTree = SDKROOT; };
-		2AF3BE5F2024581A00B15E9E /* udis86 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = udis86; sourceTree = "<group>"; };
-		2AFD4C572024648300FD58E4 /* libudis86.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libudis86.a; path = udis86/libudis86/.libs/libudis86.a; sourceTree = "<group>"; };
-		2AFD4C5A2024696600FD58E4 /* udis86_stubs.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = udis86_stubs.c; sourceTree = "<group>"; };
+		2ADCF8392035A4D400103D22 /* build_zydis.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = build_zydis.sh; sourceTree = "<group>"; };
+		2AF3BE5F2024581A00B15E9E /* zydis */ = {isa = PBXFileReference; lastKnownFileType = folder; path = zydis; sourceTree = "<group>"; };
+		2AFD4C572024648300FD58E4 /* libZydis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libZydis.a; path = zydis/libZydis.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		2AFD4C5D2024726800FD58E4 /* xnu_override.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = xnu_override.h; sourceTree = "<group>"; };
 		2AFD4C5E2024726800FD58E4 /* xnu_override.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = xnu_override.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -65,7 +66,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2AD4175E202751E5002F1EBF /* libudis86.a in Frameworks */,
+				2A8B1EA62035B190008633C9 /* libZydis.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -105,8 +106,9 @@
 		2AD416952027514D002F1EBF /* xnu_override */ = {
 			isa = PBXGroup;
 			children = (
-				2AF3BE5F2024581A00B15E9E /* udis86 */,
-				2AFD4C5A2024696600FD58E4 /* udis86_stubs.c */,
+				2AF3BE5F2024581A00B15E9E /* zydis */,
+				2ADCF8392035A4D400103D22 /* build_zydis.sh */,
+				2A26B4552035B34D006614FE /* zydis_stubs.c */,
 				2AFD4C5D2024726800FD58E4 /* xnu_override.h */,
 				2AFD4C5E2024726800FD58E4 /* xnu_override.c */,
 				2A82EDF120273F5D00BD5275 /* xnu_override_test.h */,
@@ -119,7 +121,7 @@
 			isa = PBXGroup;
 			children = (
 				2AD4176020275224002F1EBF /* Kernel.framework */,
-				2AFD4C572024648300FD58E4 /* libudis86.a */,
+				2AFD4C572024648300FD58E4 /* libZydis.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -146,19 +148,19 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXLegacyTarget section */
-		2AF3BE50202452D700B15E9E /* libudis86 */ = {
+		2AF3BE50202452D700B15E9E /* libZydis */ = {
 			isa = PBXLegacyTarget;
-			buildArgumentsString = "-c \"[ ! -f ./configure ] && ./autogen.sh; [ ! -f Makefile ] && ./configure --enable-static=yes --enable-shared=no; make -C libudis86 $(ACTION)\"";
-			buildConfigurationList = 2AF3BE51202452D700B15E9E /* Build configuration list for PBXLegacyTarget "libudis86" */;
+			buildArgumentsString = "-c \"$(PROJECT_DIR)/xnu_override/build_zydis.sh\"";
+			buildConfigurationList = 2AF3BE51202452D700B15E9E /* Build configuration list for PBXLegacyTarget "libZydis" */;
 			buildPhases = (
 			);
 			buildToolPath = /bin/sh;
-			buildWorkingDirectory = xnu_override/udis86;
+			buildWorkingDirectory = xnu_override/zydis;
 			dependencies = (
 			);
-			name = libudis86;
+			name = libZydis;
 			passBuildSettingsInEnvironment = 1;
-			productName = udis86;
+			productName = zydis;
 		};
 /* End PBXLegacyTarget section */
 
@@ -235,7 +237,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				2AF3BE50202452D700B15E9E /* libudis86 */,
+				2AF3BE50202452D700B15E9E /* libZydis */,
 				2AD4168F20275100002F1EBF /* xnu_override */,
 				2A346BEE202320F2002530AD /* Thunderbolt3Unblocker */,
 			);
@@ -266,7 +268,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2AD41759202751A4002F1EBF /* udis86_stubs.c in Sources */,
+				2A26B4562035B34D006614FE /* zydis_stubs.c in Sources */,
 				2AD4175A202751A8002F1EBF /* xnu_override.c in Sources */,
 				2AD4175B202751AA002F1EBF /* xnu_override_test.c in Sources */,
 			);
@@ -277,7 +279,7 @@
 /* Begin PBXTargetDependency section */
 		2AD4176320275564002F1EBF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 2AF3BE50202452D700B15E9E /* libudis86 */;
+			target = 2AF3BE50202452D700B15E9E /* libZydis */;
 			targetProxy = 2AD4176220275564002F1EBF /* PBXContainerItemProxy */;
 		};
 		2AD417652027556C002F1EBF /* PBXTargetDependency */ = {
@@ -432,6 +434,7 @@
 		2AD4169220275100002F1EBF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = NO;
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = G8YUU89437;
@@ -439,26 +442,27 @@
 				HEADER_SEARCH_PATHS = "$(SDKROOT)/System/Library/Frameworks/Kernel.framework/Headers";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/xnu_override/udis86/libudis86/.libs",
+					"$(TARGET_BUILD_DIR)/zydis",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = "$(inherited) $(PROJECT_DIR)/xnu_override/udis86";
+				SYSTEM_HEADER_SEARCH_PATHS = "$(inherited) $(PROJECT_DIR)/xnu_override/zydis/include $(BUILD_DIR)/zydis";
 			};
 			name = Debug;
 		};
 		2AD4169320275100002F1EBF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = NO;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = G8YUU89437;
 				EXECUTABLE_PREFIX = lib;
 				HEADER_SEARCH_PATHS = "$(SDKROOT)/System/Library/Frameworks/Kernel.framework/Headers";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/xnu_override/udis86/libudis86/.libs",
+					"$(TARGET_BUILD_DIR)/zydis",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = "$(inherited) $(PROJECT_DIR)/xnu_override/udis86";
+				SYSTEM_HEADER_SEARCH_PATHS = "$(inherited) $(PROJECT_DIR)/xnu_override/zydis/include $(BUILD_DIR)/zydis";
 			};
 			name = Release;
 		};
@@ -515,7 +519,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2AF3BE51202452D700B15E9E /* Build configuration list for PBXLegacyTarget "libudis86" */ = {
+		2AF3BE51202452D700B15E9E /* Build configuration list for PBXLegacyTarget "libZydis" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2AF3BE52202452D700B15E9E /* Debug */,
