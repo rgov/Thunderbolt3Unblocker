@@ -31,6 +31,8 @@ int new_patch_me(int n) {
 }
 
 kern_return_t xnu_override_test(void) {
+    os_log_info(OS_LOG_DEFAULT, "---- TESTING XNU_OVERRIDE ----\n");
+    
     // Capture the original return value
     volatile int n = 40;
     int orig_return_value = patch_me(n);
@@ -77,6 +79,8 @@ kern_return_t xnu_override_test(void) {
         os_log_error(OS_LOG_DEFAULT, "xnu_override_test: Unpatch safety checks failed\n");
         return KERN_ABORTED;
     }
+    
+    os_log_info(OS_LOG_DEFAULT, "---- XNU_OVERRIDE TESTS PASSED ----\n");
     
     return KERN_SUCCESS;
 }

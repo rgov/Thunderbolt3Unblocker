@@ -144,15 +144,40 @@ kern_return_t xnu_override(void *target, const void *replacement, void **origina
             goto fail;
         }
         
+        // Detect whether the instruction touches %rip
+        bool accessesInstPtr = false;
+        for (int oi = 0; oi < instruction.operandCount; oi ++) {
+            /*
+             Due to a bug currently in Zydis, I cannot do
+                ZydisRegisterGetClass(x) == ZYDIS_REGCLASS_IP
+             which is a little bit nicer than comparing directly to RIP.
+             */
+            ZydisDecodedOperand *op = &instruction.operands[oi];
+            if (op->type == ZYDIS_OPERAND_TYPE_REGISTER) {
+                if (op->reg.value == ZYDIS_REGISTER_RIP) {
+                    accessesInstPtr = true;
+                    break;
+                }
+            } else if (op->type == ZYDIS_OPERAND_TYPE_MEMORY) {
+                if (op->mem.base == ZYDIS_REGISTER_RIP || op->mem.index == ZYDIS_REGISTER_RIP) {
+                    accessesInstPtr = true;
+                    break;
+                }
+            }
+        }
+        
+        if (accessesInstPtr) {
+            os_log_error(OS_LOG_DEFAULT, LOG_PREFIX "Encountered instruction that accesses instruction pointer, proceed with caution\n");
+            if (original != NULL) {
+                os_log_error(OS_LOG_DEFAULT, LOG_PREFIX "Calling original function will likely crash!\n");
+            }
+        }
+        
+        // Make sure we have enough room to proceed
         island->insn_bytes += instruction.length;
         if (island->insn_bytes > kOriginalInstructionsSize) {
             os_log_error(OS_LOG_DEFAULT, LOG_PREFIX "Out of space in branch island, aborting\n");
             goto fail;
-        }
-        
-        // TODO: Detect
-        if (instruction.meta.category == ZYDIS_CATEGORY_RET) {
-            os_log(OS_LOG_DEFAULT, LOG_PREFIX "Patch target may be too short, proceed cautiously\n");
         }
         
         bcopy(instruction.data, insn_ptr, instruction.length);
@@ -186,7 +211,9 @@ kern_return_t xnu_override(void *target, const void *replacement, void **origina
     
     // Return a pointer to the branch island, which is how to call the original
     // function.
-    *original = &island->instructions;
+    if (original != NULL) {
+        *original = &island->instructions;
+    }
     
     // Add this patch to the linked list
     if (firstIsland == NULL) {
