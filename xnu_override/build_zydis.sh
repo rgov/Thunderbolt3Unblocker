@@ -23,7 +23,10 @@ case "$1" in
         rm -Rf "${PRODUCT_DIR}"
         ;;
     ""|build)
-        if [ ! -d "${PRODUCT_DIR}" ]; then
+        if [ ! -d "${ZYDIS_DIR}" ]; then
+            git submodule update --init --recursive
+        fi
+        if [ ! -f "${PRODUCT_DIR}/CMakeCache.txt" ]; then
             mkdir -p "${PRODUCT_DIR}"
             pushd "${PRODUCT_DIR}"
             cmake -G "${GENERATOR}" "${ZYDIS_DIR}"

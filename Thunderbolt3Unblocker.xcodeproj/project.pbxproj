@@ -155,7 +155,7 @@
 			buildPhases = (
 			);
 			buildToolPath = /bin/sh;
-			buildWorkingDirectory = xnu_override/zydis;
+			buildWorkingDirectory = xnu_override;
 			dependencies = (
 			);
 			name = libZydis;
@@ -445,7 +445,7 @@
 					"$(TARGET_BUILD_DIR)/zydis",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SYSTEM_HEADER_SEARCH_PATHS = "$(inherited) $(PROJECT_DIR)/xnu_override/zydis/include $(BUILD_DIR)/zydis";
+				SYSTEM_HEADER_SEARCH_PATHS = "$(inherited) $(PROJECT_DIR)/xnu_override/zydis/include $(TARGET_BUILD_DIR)/zydis";
 			};
 			name = Debug;
 		};
@@ -462,7 +462,7 @@
 					"$(TARGET_BUILD_DIR)/zydis",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SYSTEM_HEADER_SEARCH_PATHS = "$(inherited) $(PROJECT_DIR)/xnu_override/zydis/include $(BUILD_DIR)/zydis";
+				SYSTEM_HEADER_SEARCH_PATHS = "$(inherited) $(PROJECT_DIR)/xnu_override/zydis/include $(TARGET_BUILD_DIR)/zydis";
 			};
 			name = Release;
 		};
