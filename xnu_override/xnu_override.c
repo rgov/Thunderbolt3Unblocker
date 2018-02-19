@@ -14,8 +14,7 @@
 #include <os/log.h>
 #include <string.h>
 
-#define __UD_STANDALONE__ 1
-#include "udis86.h"
+#include <Zydis/Zydis.h>
 
 #include "xnu_override.h"
 
@@ -125,31 +124,64 @@ kern_return_t xnu_override(void *target, const void *replacement, void **origina
     
     // Now we will use the disassembler to copy instructions over one by one
     // until we have enough room for our jump
-    ud_t u;
-    ud_init(&u);
-    ud_set_input_buffer(&u, target, 64 /* assume >64 bytes */);
-    ud_set_mode(&u, 64);
+    ZydisDecoder decoder;
+    ZydisDecoderInit(&decoder, ZYDIS_MACHINE_MODE_LONG_64, ZYDIS_ADDRESS_WIDTH_64);
   
     island->insn_bytes = 0;
     void *insn_ptr = &island->instructions;
     while (island->insn_bytes < sizeof(kPatchTemplate)) {
-        if (!ud_disassemble(&u)) {
-            os_log_error(OS_LOG_DEFAULT, LOG_PREFIX "Cannot disassemble instruction, aborting\n");
+        ZydisStatus zerr;
+        ZydisDecodedInstruction instruction;
+        zerr = ZydisDecoderDecodeBuffer(
+            &decoder,
+            target + island->insn_bytes,
+            64, /* always assume there are 64 bytes left */
+            (uint64_t)target + island->insn_bytes,
+            &instruction
+        );
+        if (!ZYDIS_SUCCESS(zerr)) {
+            os_log_error(OS_LOG_DEFAULT, LOG_PREFIX "Cannot disassemble instruction, aborting: %d\n", zerr);
             goto fail;
         }
         
-        island->insn_bytes += ud_insn_len(&u);
+        // Detect whether the instruction touches %rip
+        bool accessesInstPtr = false;
+        for (int oi = 0; oi < instruction.operandCount; oi ++) {
+            /*
+             Due to a bug currently in Zydis, I cannot do
+                ZydisRegisterGetClass(x) == ZYDIS_REGCLASS_IP
+             which is a little bit nicer than comparing directly to RIP.
+             */
+            ZydisDecodedOperand *op = &instruction.operands[oi];
+            if (op->type == ZYDIS_OPERAND_TYPE_REGISTER) {
+                if (op->reg.value == ZYDIS_REGISTER_RIP) {
+                    accessesInstPtr = true;
+                    break;
+                }
+            } else if (op->type == ZYDIS_OPERAND_TYPE_MEMORY) {
+                if (op->mem.base == ZYDIS_REGISTER_RIP || op->mem.index == ZYDIS_REGISTER_RIP) {
+                    accessesInstPtr = true;
+                    break;
+                }
+            }
+        }
+        
+        if (accessesInstPtr) {
+            os_log_error(OS_LOG_DEFAULT, LOG_PREFIX "Encountered instruction that accesses instruction pointer, proceed with caution\n");
+            if (original != NULL) {
+                os_log_error(OS_LOG_DEFAULT, LOG_PREFIX "Calling original function will likely crash!\n");
+            }
+        }
+        
+        // Make sure we have enough room to proceed
+        island->insn_bytes += instruction.length;
         if (island->insn_bytes > kOriginalInstructionsSize) {
             os_log_error(OS_LOG_DEFAULT, LOG_PREFIX "Out of space in branch island, aborting\n");
             goto fail;
         }
         
-        if (ud_insn_len(&u) == 1 && memcmp(ud_insn_ptr(&u), "\xC3", 1) == 0) {
-            os_log(OS_LOG_DEFAULT, LOG_PREFIX "Patch target may be too short, proceed cautiously\n");
-        }
-        
-        bcopy((void *)ud_insn_ptr(&u), insn_ptr, ud_insn_len(&u));
-        insn_ptr += ud_insn_len(&u);
+        bcopy(instruction.data, insn_ptr, instruction.length);
+        insn_ptr += instruction.length;
     }
     
     // Ok, the branch island is almost ready, we just need to insert the address
@@ -179,7 +211,9 @@ kern_return_t xnu_override(void *target, const void *replacement, void **origina
     
     // Return a pointer to the branch island, which is how to call the original
     // function.
-    *original = &island->instructions;
+    if (original != NULL) {
+        *original = &island->instructions;
+    }
     
     // Add this patch to the linked list
     if (firstIsland == NULL) {

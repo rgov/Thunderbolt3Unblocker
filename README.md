@@ -17,7 +17,7 @@ unsupported in the first place. Use at your own peril.
 To prepare your development environment, please run
 
     git submodule update --init --recursive
-    brew install autoconf automake libtool
+    brew install cmake
 
 It is recommended to keep System Integrity Protection on. To lower security
 just enough to allow this kernel extension to be loaded without code signing, 
