@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/rgov/Thunderbolt3Unblocker.svg?branch=master)](https://travis-ci.org/rgov/Thunderbolt3Unblocker)
+
 # Thunderbolt 3 Unblocker
 
 This project provides a kernel extension that unblocks unsupported Thunderbolt
@@ -27,15 +29,13 @@ To prepare your development environment, please run
 Build the project with Xcode. Make sure to change code signing settings as
 appropriate.
 
-It is recommended that you keep as many System Integrity Protection features on
-as possible; use `csrutil enable --without kext`. If you are not using code
-signing, you can additionally set `nvram boot-arg="kext-dev-mode=1"`.
-
 Load the kernel extension with:
 
     sudo chown -R root:wheel Thunderbolt3Unblocker.kext
     sudo kextload Thunderbolt3Unblocker.kext
 
+If loading the kext fails: Reboot into the Recovery Partition and disable kext
+security restrictions using `csrutil enable --without kext`.
 
 ## `xnu_override`
 

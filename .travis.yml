@@ -1,0 +1,16 @@
+language: objective-c
+
+os: osx
+osx_image: xcode9.3beta
+
+script:
+  - xcodebuild -project Thunderbolt3Unblocker.xcodeproj -scheme Thunderbolt3Unblocker -configuration Release CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO SYMROOT=./build
+
+# It would be nice to subsequently load and test the kernel extension, but this
+# is not currently possible on Travis CI.
+#
+# Note that the kext runs xnu_override_test on load, and will fail the kextload
+# if the command fails. (That, or the system will panic.)
+# 
+# - sudo chown -R root:wheel ./build/Release/Thunderbolt3Unblocker.kext
+# - sudo kextload ./build/Release/Thunderbolt3Unblocker.kext
