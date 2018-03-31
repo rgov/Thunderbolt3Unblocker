@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/rgov/Thunderbolt3Unblocker.svg?branch=master)](https://travis-ci.org/rgov/Thunderbolt3Unblocker)
+
 # Thunderbolt 3 Unblocker
 
 This project provides a kernel extension that unblocks unsupported Thunderbolt
