@@ -23,7 +23,7 @@ case "$1" in
         rm -Rf "${PRODUCT_DIR}"
         ;;
     ""|build)
-        if [ ! -d "${ZYDIS_DIR}" ]; then
+        if [ ! -f "${ZYDIS_DIR}/CMakeLists.txt" ]; then
             git submodule update --init --recursive
         fi
         if [ ! -f "${PRODUCT_DIR}/CMakeCache.txt" ]; then
