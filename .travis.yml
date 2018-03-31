@@ -4,6 +4,4 @@ os: osx
 osx_image: xcode9.3beta
 
 install:
-  - nvram -p
-  - csrutil status
-  - xcodebuild -project Thunderbolt3Unblocker.xcodeproj -scheme Thunderbolt3Unblocker -configuration Release
+  - xcodebuild -project Thunderbolt3Unblocker.xcodeproj -scheme Thunderbolt3Unblocker -configuration Release CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
