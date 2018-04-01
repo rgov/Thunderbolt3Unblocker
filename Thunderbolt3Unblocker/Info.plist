@@ -33,7 +33,17 @@
 		<key>com.apple.kpi.unsupported</key>
 		<string>9.0</string>
 	</dict>
-	<key>OSBundleRequired</key>
-	<string>Root</string>
+	<key>IOKitPersonalities</key>
+	<dict>
+		<key>Thunderbolt3Unblocker</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>es.govost.ryan.Thunderbolt3Unblocker</string>
+			<key>IOClass</key>
+			<string>IOService</string>
+			<key>IOProviderClass</key>
+			<string>IOThunderboltController</string>
+		</dict>
+	</dict>
 </dict>
 </plist>
