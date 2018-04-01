@@ -33,5 +33,7 @@
 		<key>com.apple.kpi.unsupported</key>
 		<string>9.0</string>
 	</dict>
+	<key>OSBundleRequired</key>
+	<string>Root</string>
 </dict>
 </plist>
