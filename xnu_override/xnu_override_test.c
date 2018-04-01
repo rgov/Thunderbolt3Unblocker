@@ -14,6 +14,7 @@
 
 
 // Here's a simple set of functions to patch
+__attribute__((noinline))
 int patch_me(int n __unused) {
     // Our patch target cannot be too small, so we have to do some stuff.
     int a = 1, b = 1;
