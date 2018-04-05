@@ -19,7 +19,16 @@ check for [open issues][issues] before using on newer versions.
 
 [issues]: https://github.com/rgov/Thunderbolt3Unblocker/issues
 
+
 ## Installation
+
+Please head over to the [Releases][] page for binaries and installation
+instructions.
+
+[Releases]: https://github.com/rgov/Thunderbolt3Unblocker/releases
+
+
+## Building
 
 To prepare your development environment, please run
 
@@ -34,8 +43,9 @@ Load the kernel extension with:
     sudo chown -R root:wheel Thunderbolt3Unblocker.kext
     sudo kextload Thunderbolt3Unblocker.kext
 
-If loading the kext fails: Reboot into the Recovery Partition and disable kext
-security restrictions using `csrutil enable --without kext`.
+If loading the kext fails: Reboot into Recovery Mode and disable kext security
+restrictions using `csrutil enable --without kext`.
+
 
 ## `xnu_override`
 
