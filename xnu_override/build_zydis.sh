@@ -29,7 +29,7 @@ case "$1" in
         if [ ! -f "${PRODUCT_DIR}/CMakeCache.txt" ]; then
             mkdir -p "${PRODUCT_DIR}"
             pushd "${PRODUCT_DIR}"
-            cmake -G "${GENERATOR}" "${ZYDIS_DIR}"
+            CFLAGS="${OTHER_CFLAGS}" cmake -G "${GENERATOR}" "${ZYDIS_DIR}"
             popd
         fi
         cmake --build "${PRODUCT_DIR}"
