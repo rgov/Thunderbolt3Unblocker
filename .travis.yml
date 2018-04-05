@@ -10,7 +10,7 @@ matrix:
 script:
   - xcodebuild -project Thunderbolt3Unblocker.xcodeproj -scheme Thunderbolt3Unblocker -configuration Release CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO SYMROOT=./build
   - sudo chown -R root:wheel ./build/Release/Thunderbolt3Unblocker.kext
-  - sudo kextutil -nt build/Release/Thunderbolt3Unblocker.kext
+  - sw_vers -buildVersion | grep -q '^16[A-Z]' && sudo kextutil -nt build/Release/Thunderbolt3Unblocker.kext || true
 
 # It would be nice to subsequently load and test the kernel extension, but this
 # is not currently possible on Travis CI.
@@ -19,3 +19,6 @@ script:
 # if the command fails. (That, or the system will panic.)
 # 
 # - sudo kextload ./build/Release/Thunderbolt3Unblocker.kext
+#
+# The sw_vers command above only runs kextutil on macOS 10.12; otherwise it
+# fails with "Unable to stage kext to secure location"
