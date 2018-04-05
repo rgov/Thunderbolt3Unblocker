@@ -14,8 +14,9 @@ the patch in memory and on-the-fly.
 Note there is likely a reason why IOThunderboltFamily considers a peripheral
 unsupported in the first place. Use at your own peril.
 
-This kernel extension was last tested against macOS High Sierra 10.13.4. Please
-check for [open issues][issues] before using on newer versions.
+This kernel extension was last tested against macOS High Sierra 10.13.4 and 
+macOS Sierra 10.12.6. Please check for [open issues][issues] before using on
+other versions.
 
 [issues]: https://github.com/rgov/Thunderbolt3Unblocker/issues
 
