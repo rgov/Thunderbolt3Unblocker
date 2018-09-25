@@ -52,6 +52,8 @@ Load the kernel extension with:
 If loading the kext fails: Reboot into Recovery Mode and disable kext security
 restrictions using `csrutil enable --without kext`.
 
+If you are developing the kext, you should know that the NVRAM variable `t3u-incompatible` is written whenever there is a panic while loading the kext. The presence of this variable prevents the kext from loading again on the same system version. You may want to disable the code that does this (in Thunderbolt3Unblocker.c), or delete it with `nvram -d t3u-incompatible`.
+
 
 ## `xnu_override`
 
