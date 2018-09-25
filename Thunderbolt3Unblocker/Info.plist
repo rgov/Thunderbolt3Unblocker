@@ -24,7 +24,9 @@
 	<dict>
 		<key>com.apple.iokit.IOThunderboltFamily</key>
 		<string>1.0.0</string>
-		<key>com.apple.kpi.bsd</key>
+		<key>com.apple.driver.AppleEFINVRAM</key>
+		<string>2.0</string>
+		<key>com.apple.kpi.iokit</key>
 		<string>9.0</string>
 		<key>com.apple.kpi.libkern</key>
 		<string>9.0</string>

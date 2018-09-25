@@ -10,6 +10,8 @@
 		2A26B4562035B34D006614FE /* zydis_stubs.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A26B4552035B34D006614FE /* zydis_stubs.c */; };
 		2A346BF3202320F2002530AD /* Thunderbolt3Unblocker.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A346BF2202320F2002530AD /* Thunderbolt3Unblocker.c */; };
 		2A67AC3C2024857000B0241C /* LICENSE.md in Resources */ = {isa = PBXBuildFile; fileRef = 2A67AC3B2024857000B0241C /* LICENSE.md */; };
+		2A78D8A0215AC3B3001A1D2C /* NVRAM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2A78D89E215AC3B3001A1D2C /* NVRAM.cpp */; };
+		2A78D8A1215AC3B3001A1D2C /* NVRAM.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A78D89F215AC3B3001A1D2C /* NVRAM.h */; };
 		2A8B1EA62035B190008633C9 /* libZydis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AFD4C572024648300FD58E4 /* libZydis.a */; };
 		2AD4175A202751A8002F1EBF /* xnu_override.c in Sources */ = {isa = PBXBuildFile; fileRef = 2AFD4C5E2024726800FD58E4 /* xnu_override.c */; };
 		2AD4175B202751AA002F1EBF /* xnu_override_test.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A82EDEF20273E0000BD5275 /* xnu_override_test.c */; };
@@ -42,6 +44,8 @@
 		2A346BF4202320F2002530AD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2A67AC3A202482E700B0241C /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		2A67AC3B2024857000B0241C /* LICENSE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = "<group>"; };
+		2A78D89E215AC3B3001A1D2C /* NVRAM.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NVRAM.cpp; sourceTree = "<group>"; };
+		2A78D89F215AC3B3001A1D2C /* NVRAM.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NVRAM.h; sourceTree = "<group>"; };
 		2A82EDEF20273E0000BD5275 /* xnu_override_test.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = xnu_override_test.c; sourceTree = "<group>"; };
 		2A82EDF120273F5D00BD5275 /* xnu_override_test.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = xnu_override_test.h; sourceTree = "<group>"; };
 		2AD4169020275100002F1EBF /* libxnu_override.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libxnu_override.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -98,6 +102,8 @@
 			isa = PBXGroup;
 			children = (
 				2A346BF2202320F2002530AD /* Thunderbolt3Unblocker.c */,
+				2A78D89F215AC3B3001A1D2C /* NVRAM.h */,
+				2A78D89E215AC3B3001A1D2C /* NVRAM.cpp */,
 				2A346BF4202320F2002530AD /* Info.plist */,
 			);
 			path = Thunderbolt3Unblocker;
@@ -133,6 +139,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2A78D8A1215AC3B3001A1D2C /* NVRAM.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -260,6 +267,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2A78D8A0215AC3B3001A1D2C /* NVRAM.cpp in Sources */,
 				2A346BF3202320F2002530AD /* Thunderbolt3Unblocker.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
