@@ -1,5 +1,10 @@
 [![Build Status](https://travis-ci.org/rgov/Thunderbolt3Unblocker.svg?branch=master)](https://travis-ci.org/rgov/Thunderbolt3Unblocker)
 
+```diff
+- Please do not install on macOS Mojave 10.14! It is not yet compatible.
+- Check back soon for an updated version.
+```
+
 # Thunderbolt 3 Unblocker
 
 This project provides a kernel extension that unblocks unsupported Thunderbolt
