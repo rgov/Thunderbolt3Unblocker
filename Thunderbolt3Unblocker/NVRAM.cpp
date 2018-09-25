@@ -144,8 +144,9 @@ int deleteNVRAMProperty(const char *symbol) {
     
     // Remove the symbol
     nvram->removeProperty(sym);
-    sym->release();
     nvram->sync();
+    nvram->release();
+    sym->release();
     return 1;
 }
 
