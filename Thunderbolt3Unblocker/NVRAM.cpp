@@ -55,7 +55,7 @@ int readNVRAMProperty(const char *symbol, void *value, size_t *len) {
         return 0;
     }
     
-    /* convert to data */
+    // Try to convert the object to an OSData or OSString
     if (OSData *data = OSDynamicCast(OSData, obj)) {
         *len = (size_t)data->getLength();
         
