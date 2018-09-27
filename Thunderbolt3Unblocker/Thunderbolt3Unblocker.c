@@ -26,7 +26,7 @@ int new_skip_enumeration(void) {
 
 static bool isSystemIncompatible(void) {
     char version[16];
-    size_t len = sizeof(version);
+    size_t len = sizeof(version) - 1;
     
     // Read the incompatibility NVRAM variable
     int success = readNVRAMProperty("t3u-incompatible", version, &len);
@@ -62,7 +62,7 @@ kern_return_t Thunderbolt3Unblocker_start(kmod_info_t *ki, void *d)
     
     // Run a preflight sanity check
     kern_return_t err;
-    err = xnu_override_test();
+    err = KERN_SUCCESS; //xnu_override_test();
     if (err != KERN_SUCCESS) {
         os_log_error(OS_LOG_DEFAULT, "Thunderbolt3Unblocker: Preflight sanity check failed, aborting\n");
         return err;
