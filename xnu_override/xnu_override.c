@@ -9,7 +9,6 @@
 #include <kern/task.h>
 #include <libkern/OSMalloc.h>
 #include <mach/mach_vm.h>
-#include <mach/vm_map.h>
 #include <machine/machine_routines.h>
 #include <os/log.h>
 #include <string.h>
@@ -109,15 +108,22 @@ static void enable_write_protection(void) {
     set_cr0(get_cr0() | CR0_WP);
 }
 
-
-kern_return_t xnu_override(void *target, const void *replacement, void **original) {
+static BranchIsland *alloc_island(void) {
     if (!tag)
         tag = OSMalloc_Tagalloc("branch_island", OSMT_DEFAULT);
-    
+    return OSMalloc(PAGE_SIZE, tag);
+}
+
+static void free_island(BranchIsland *island) {
+    OSFree(island, PAGE_SIZE, tag);
+}
+
+
+kern_return_t xnu_override(void *target, const void *replacement, void **original) {
     // Allocate a branch island
     os_log_debug(OS_LOG_DEFAULT, LOG_PREFIX "Creating branch island\n");
     
-    BranchIsland *island = OSMalloc(PAGE_SIZE, tag);
+    BranchIsland *island = alloc_island();
     island->target = target;
     island->nextIsland = NULL;
     bcopy(kIslandTemplate, &island->instructions, sizeof(island->instructions));
@@ -251,7 +257,7 @@ kern_return_t xnu_override(void *target, const void *replacement, void **origina
     return KERN_SUCCESS;
     
 fail:
-    OSFree(island, PAGE_SIZE, tag);
+    free_island(island);
     return KERN_ABORTED;
 }
 
@@ -283,7 +289,7 @@ kern_return_t xnu_unpatch(const void *target) {
     boolean_t ints = ml_set_interrupts_enabled(false);
     disable_write_protection();
     bcopy(island->instructions, island->target, island->insn_bytes);
-    OSFree(island, PAGE_SIZE, tag);
+    free_island(island);
     enable_write_protection();
     ml_set_interrupts_enabled(ints);
     
