@@ -190,6 +190,27 @@ kern_return_t xnu_override(void *target, const void *replacement, void **origina
     uint64_t jumpTo = (uint64_t)target + island->insn_bytes;
     bcopy(&jumpTo, &island->instructions[kIslandJumpOffset], sizeof(uint64_t));
 
+#if 0
+    // Check the permissions before
+    mach_vm_offset_t islandcopy = (mach_vm_offset_t)island;
+    mach_vm_size_t vmsize;
+    vm_region_basic_info_data_64_t info;
+    mach_msg_type_number_t ninfo = VM_REGION_BASIC_INFO_COUNT_64;
+    mach_port_t object;
+    kern_return_t err = mach_vm_region(get_task_map(kernel_task), &islandcopy, &vmsize, VM_REGION_BASIC_INFO_64, (vm_region_info_t)&info, &ninfo, &object);
+    if (err != KERN_SUCCESS) {
+        os_log_error(OS_LOG_DEFAULT, LOG_PREFIX "Failed to get VM region info\n");
+    } else {
+        os_log_info(OS_LOG_DEFAULT, LOG_PREFIX "Island memory region has prot %c%c%c, max prot %c%c%c\n",
+               (info.protection & VM_PROT_READ) ? 'r' : '-',
+               (info.protection & VM_PROT_WRITE) ? 'w' : '-',
+               (info.protection & VM_PROT_EXECUTE) ? 'x' : '-',
+               (info.max_protection & VM_PROT_READ) ? 'r' : '-',
+               (info.max_protection & VM_PROT_WRITE) ? 'w' : '-',
+               (info.max_protection & VM_PROT_EXECUTE) ? 'x' : '-');
+    }
+#endif
+    
     // The branch island is ready. Switch from writable to executable.
     kern_return_t err = vm_protect(get_task_map(kernel_task), (vm_address_t)island, PAGE_SIZE, false, VM_PROT_EXECUTE | VM_PROT_READ);
     if (err != KERN_SUCCESS) {
