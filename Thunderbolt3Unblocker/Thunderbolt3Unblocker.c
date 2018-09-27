@@ -62,7 +62,7 @@ kern_return_t Thunderbolt3Unblocker_start(kmod_info_t *ki, void *d)
     
     // Run a preflight sanity check
     kern_return_t err;
-    err = KERN_SUCCESS; //xnu_override_test();
+    err = xnu_override_test();
     if (err != KERN_SUCCESS) {
         os_log_error(OS_LOG_DEFAULT, "Thunderbolt3Unblocker: Preflight sanity check failed, aborting\n");
         return err;
@@ -83,6 +83,6 @@ kern_return_t Thunderbolt3Unblocker_start(kmod_info_t *ki, void *d)
 
 kern_return_t Thunderbolt3Unblocker_stop(kmod_info_t *ki, void *d)
 {
-    //xnu_unpatch_all();
+    xnu_unpatch_all();
     return KERN_SUCCESS;
 }
