@@ -9,6 +9,7 @@
 #include <kern/task.h>
 #include <libkern/OSMalloc.h>
 #include <mach/mach_vm.h>
+#include <mach/vm_map.h>
 #include <machine/machine_routines.h>
 #include <os/log.h>
 #include <string.h>
@@ -54,12 +55,16 @@ typedef struct BranchIsland {
     void *target;
     unsigned int insn_bytes;
     char instructions[sizeof(kIslandTemplate)];
-    struct BranchIsland *nextIsland; // linked list for efficient unloading
 } BranchIsland;
 
-BranchIsland *firstIsland = NULL;
-
 static OSMallocTag tag = NULL;
+
+
+// All branch islands will be allocated here. On Mojave, we lost the ability to
+// execute from our OSMalloc allocations.
+const int maxIslands = 32;
+uint8_t islandHeapUsed[maxIslands];
+BranchIsland islandHeap[maxIslands] __attribute__((section("__TEXT,__text")));
 
 
 // From xnu/osfmk/proc_reg.h
@@ -108,14 +113,37 @@ static void enable_write_protection(void) {
     set_cr0(get_cr0() | CR0_WP);
 }
 
-static BranchIsland *alloc_island(void) {
+
+// Allocate a temporary, non-executable island for writing
+static BranchIsland *alloc_nx_island(void) {
     if (!tag)
         tag = OSMalloc_Tagalloc("branch_island", OSMT_DEFAULT);
-    return OSMalloc(PAGE_SIZE, tag);
+    return OSMalloc(sizeof(BranchIsland), tag);
+}
+
+// Move a temporary island to our executable heap
+static BranchIsland *move_island(BranchIsland *nx) {
+    for (int i = 0; i < maxIslands; i ++) {
+        if (islandHeapUsed[i])
+            continue;
+        
+        boolean_t ints = ml_set_interrupts_enabled(false);
+        disable_write_protection();
+        bcopy(nx, &islandHeap[i], sizeof(BranchIsland));
+        enable_write_protection();
+        ml_set_interrupts_enabled(ints);
+        
+        islandHeapUsed[i] = 1;
+        return &islandHeap[i];
+    }
+    
+    os_log_error(OS_LOG_DEFAULT, LOG_PREFIX "Cannot allocate another ");
+    return NULL;
 }
 
 static void free_island(BranchIsland *island) {
-    OSFree(island, PAGE_SIZE, tag);
+    long i = island - &islandHeap[0];
+    islandHeapUsed[i] = 0;
 }
 
 
@@ -123,9 +151,8 @@ kern_return_t xnu_override(void *target, const void *replacement, void **origina
     // Allocate a branch island
     os_log_debug(OS_LOG_DEFAULT, LOG_PREFIX "Creating branch island\n");
     
-    BranchIsland *island = alloc_island();
+    BranchIsland *island = alloc_nx_island();
     island->target = target;
-    island->nextIsland = NULL;
     bcopy(kIslandTemplate, &island->instructions, sizeof(island->instructions));
     
     // Now we will use the disassembler to copy instructions over one by one
@@ -195,34 +222,9 @@ kern_return_t xnu_override(void *target, const void *replacement, void **origina
     // we copied into the island.
     uint64_t jumpTo = (uint64_t)target + island->insn_bytes;
     bcopy(&jumpTo, &island->instructions[kIslandJumpOffset], sizeof(uint64_t));
-
-#if 0
-    // Check the permissions before
-    mach_vm_offset_t islandcopy = (mach_vm_offset_t)island;
-    mach_vm_size_t vmsize;
-    vm_region_basic_info_data_64_t info;
-    mach_msg_type_number_t ninfo = VM_REGION_BASIC_INFO_COUNT_64;
-    mach_port_t object;
-    kern_return_t err = mach_vm_region(get_task_map(kernel_task), &islandcopy, &vmsize, VM_REGION_BASIC_INFO_64, (vm_region_info_t)&info, &ninfo, &object);
-    if (err != KERN_SUCCESS) {
-        os_log_error(OS_LOG_DEFAULT, LOG_PREFIX "Failed to get VM region info\n");
-    } else {
-        os_log_info(OS_LOG_DEFAULT, LOG_PREFIX "Island memory region has prot %c%c%c, max prot %c%c%c\n",
-               (info.protection & VM_PROT_READ) ? 'r' : '-',
-               (info.protection & VM_PROT_WRITE) ? 'w' : '-',
-               (info.protection & VM_PROT_EXECUTE) ? 'x' : '-',
-               (info.max_protection & VM_PROT_READ) ? 'r' : '-',
-               (info.max_protection & VM_PROT_WRITE) ? 'w' : '-',
-               (info.max_protection & VM_PROT_EXECUTE) ? 'x' : '-');
-    }
-#endif
     
-    // The branch island is ready. Switch from writable to executable.
-    kern_return_t err = vm_protect(get_task_map(kernel_task), (vm_address_t)island, PAGE_SIZE, false, VM_PROT_EXECUTE | VM_PROT_READ);
-    if (err != KERN_SUCCESS) {
-        os_log_error(OS_LOG_DEFAULT, LOG_PREFIX "Failed to mark island executable, aborting\n");
-        goto fail;
-    }
+    // Move the island to the executable heap
+    island = move_island(island);
     
     // Now we need to patch the target to insert a jump to the replacement code
     boolean_t ints = ml_set_interrupts_enabled(false);
@@ -242,17 +244,6 @@ kern_return_t xnu_override(void *target, const void *replacement, void **origina
         *original = &island->instructions;
     }
     
-    // Add this patch to the linked list
-    if (firstIsland == NULL) {
-        firstIsland = island;
-    } else {
-        BranchIsland *islandPtr = firstIsland;
-        while (islandPtr->nextIsland != NULL) {
-            islandPtr = islandPtr->nextIsland;
-        }
-        islandPtr->nextIsland = island;
-    }
-    
     os_log(OS_LOG_DEFAULT, LOG_PREFIX "Patch applied\n");
     return KERN_SUCCESS;
     
@@ -266,23 +257,17 @@ kern_return_t xnu_unpatch(const void *target) {
     os_log(OS_LOG_DEFAULT, LOG_PREFIX "Reverting patch\n");
     
     // Scan through the list of branch islands for this target
-    BranchIsland *island = firstIsland;
-    BranchIsland *prevIsland = NULL;
-    while (island != NULL && island->target != target) {
-        prevIsland = island;
-        island = island->nextIsland;
+    BranchIsland *island = NULL;
+    for (int i = 0; i < maxIslands; i ++) {
+        if (islandHeapUsed[i] && islandHeap[i].target == target) {
+            island = &islandHeap[i];
+            break;
+        }
     }
     
     if (!island) {
         os_log_error(OS_LOG_DEFAULT, LOG_PREFIX "Unpatch target not found\n");
         return KERN_ABORTED;
-    }
-    
-    // Update the linked list to skip over this island
-    if (prevIsland == NULL) {
-        firstIsland = island->nextIsland;
-    } else {
-        prevIsland->nextIsland = island->nextIsland;
     }
     
     // Copy instructions back to the target and destroy the island
@@ -298,10 +283,14 @@ kern_return_t xnu_unpatch(const void *target) {
 
 
 kern_return_t xnu_unpatch_all(void) {
-    while (firstIsland != NULL) {
-        kern_return_t err = xnu_unpatch(firstIsland->target);
-        if (err != KERN_SUCCESS)
-            return err;
+    for (int i = 0; i < maxIslands; i ++) {
+        if (islandHeapUsed[i]) {
+            kern_return_t err = xnu_unpatch(islandHeap[i].target);
+            if (err != KERN_SUCCESS)
+                return err;
+            
+            free_island(&islandHeap[i]);
+        }
     }
     return KERN_SUCCESS;
 }
