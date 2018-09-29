@@ -2,7 +2,7 @@
 
 ## Thunderbolt 3 Unblocker
 
-Except where noted below, the code in this project is licensed uder the MIT 
+Except where noted below, the code in this project is licensed under the MIT 
 License:
 
     Copyright 2018 Ryan Govostes
