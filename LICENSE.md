@@ -26,7 +26,7 @@ License:
     DEALINGS IN THE SOFTWARE.
 
 
-## Udis86
+## Zydis
 
 `xnu_override` uses the [Zydis][zydis] disassembler library, which is licensed 
 under the MIT License.
