@@ -14,7 +14,7 @@ the patch in memory and on-the-fly.
 Note there is likely a reason why IOThunderboltFamily considers a peripheral
 unsupported in the first place. Use at your own peril.
 
-This kernel extension was last tested against macOS Mojave 10.14.5, macOS High 
+This kernel extension was last tested against macOS Catalina 10.15.0, macOS Mojave 10.14.5, macOS High 
 Sierra 10.13.4 and macOS Sierra 10.12.6. Please check for [open issues][issues]
 before using on other versions, and review the [troubleshooting guide][trouble].
 
