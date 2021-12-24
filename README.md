@@ -1,5 +1,8 @@
 [![Build Status](https://travis-ci.org/rgov/Thunderbolt3Unblocker.svg?branch=master)](https://travis-ci.org/rgov/Thunderbolt3Unblocker)
 
+| :warning: Thunderbolt3Unblocker does not yet work on Apple Silicon. |
+|---------------------------------------------------------------------|
+
 # Thunderbolt 3 Unblocker
 
 This project provides a kernel extension that unblocks unsupported Thunderbolt
@@ -14,9 +17,9 @@ the patch in memory and on-the-fly.
 Note there is likely a reason why IOThunderboltFamily considers a peripheral
 unsupported in the first place. Use at your own peril.
 
-This kernel extension was last tested against macOS Catalina 10.15.0, macOS Mojave 10.14.5, macOS High 
-Sierra 10.13.4 and macOS Sierra 10.12.6. Please check for [open issues][issues]
-before using on other versions, and review the [troubleshooting guide][trouble].
+This kernel extension has been tested against macOS Monterey 12 and as far
+back as macOS Sierra 10.12.6. Please check for [open issues][issues] before
+using on other versions, and review the [troubleshooting guide][trouble].
 
 [issues]: https://github.com/rgov/Thunderbolt3Unblocker/issues
 [trouble]: https://github.com/rgov/Thunderbolt3Unblocker/wiki/Troubleshooting
