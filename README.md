@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/rgov/Thunderbolt3Unblocker.svg?branch=master)](https://travis-ci.org/rgov/Thunderbolt3Unblocker)
 
-| :warning: Thunderbolt3Unblocker does not yet work on Apple Silicon. |
-|---------------------------------------------------------------------|
+| :warning: Thunderbolt 3 Unblocker does not yet work on Apple Silicon. |
+|-----------------------------------------------------------------------|
 
 # Thunderbolt 3 Unblocker
 
